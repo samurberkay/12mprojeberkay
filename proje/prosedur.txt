@@ -1,0 +1,60 @@
+USE [Test]
+GO
+
+/****** Object:  StoredProcedure [dbo].[usp_STISelect]    Script Date: 17.03.2021 22:35:25 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROC [dbo].[usp_STISelect] 
+    @MalKodu varchar(30),
+    @BaslangicTarihi int,
+    @BitisTarihi int
+AS 
+	SET NOCOUNT ON 
+	SET XACT_ABORT ON  
+
+	BEGIN TRAN
+
+	SELECT [ID] AS SiraNo, [IslemTur], [EvrakNo], [Tarih], [Miktar] AS GirisMiktar , [Miktar] AS CikisMiktar, [Miktar] AS StokMiktar
+	FROM   [dbo].[STI] 
+	WHERE  ([MalKodu] = @MalKodu OR @MalKodu IS NULL) 
+	       AND ([Tarih] between @BaslangicTarihi 
+	       AND @BitisTarihi OR @BitisTarihi IS NULL) 
+		   order by [SiraNo], [Tarih] asc
+
+	COMMIT
+GO
+
+
+USE [Test]
+GO
+
+/****** Object:  StoredProcedure [dbo].[usp_STKSelect]    Script Date: 17.03.2021 22:37:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROC [dbo].[usp_STKSelect] 
+    @MalAdi varchar(30)
+AS 
+	SET NOCOUNT ON 
+	SET XACT_ABORT ON  
+
+	BEGIN TRAN
+
+	SELECT [MalKodu], [MalAdi] 
+	FROM   [dbo].[STK] 
+	WHERE  ([MalAdi] = @MalAdi OR @MalAdi IS NULL) 
+
+	COMMIT
+GO
+
+
